@@ -1,6 +1,5 @@
-#!/usr/bin/env python3
-"""TPI de Organización Empresarial
-Simulación de Solicitud de Vacaciones"""
+'''TPI · Organización Empresarial
+Simulación de Solicitud de Vacaciones'''
 
 from csv import writer
 import pandas as pd
@@ -16,10 +15,10 @@ def obtener_siguiente_codigo_tramite() -> str:
     ruta = "estados/contador.csv"
 
     try:
-        with open(ruta, "r", encoding="utf-8") as archivo:
+        with open(ruta, 'r', encoding='utf-8') as archivo:
             numero = int(archivo.read().strip() or "0")
         numero += 1
-        with open(ruta, "w", encoding="utf-8") as archivo:
+        with open(ruta, 'w', encoding='utf-8') as archivo:
             archivo.write(str(numero))
         codigo = f"VAC{numero:03d}"
         return codigo
@@ -51,7 +50,7 @@ def cargar_tramite(codigo_tramite: str) -> pd.DataFrame:
 
     try:
         tramites = pd.read_csv(ruta)
-        tramite = tramites.loc[tramites["id_tramite"] == codigo_tramite].copy()
+        tramite = tramites.loc[tramites['id_tramite'] == codigo_tramite].copy()
         if not tramite.empty:
             return tramite
         else:
@@ -147,14 +146,14 @@ def actualizar_tramite(codigo_tramite: str, fecha_inicio: bool|datetime = False,
     try:
         tramites = pd.read_csv(ruta)
         if fecha_inicio:
-            tramites["fecha_inicio"] = tramites["fecha_inicio"].astype(str).str.replace("nan", "")
-            tramites.loc[tramites["id_tramite"] == codigo_tramite, "fecha_inicio"] = fecha_inicio.strftime("%d/%m/%Y")
+            tramites['fecha_inicio'] = tramites['fecha_inicio'].astype(str).str.replace('nan', '')
+            tramites.loc[tramites['id_tramite'] == codigo_tramite, 'fecha_inicio'] = fecha_inicio.strftime('%d/%m/%Y')
         if fecha_fin:
-            tramites["fecha_fin"] = tramites["fecha_fin"].astype(str).str.replace("nan", "")
-            tramites.loc[tramites["id_tramite"] == codigo_tramite, "fecha_fin"] = fecha_fin.strftime("%d/%m/%Y")
+            tramites['fecha_fin'] = tramites['fecha_fin'].astype(str).str.replace('nan', '')
+            tramites.loc[tramites['id_tramite'] == codigo_tramite, 'fecha_fin'] = fecha_fin.strftime('%d/%m/%Y')
         if nuevo_estado:
-            tramites.loc[tramites["id_tramite"] == codigo_tramite, "estado"] = nuevo_estado
-        with open(ruta, "w", encoding="utf-8", newline="") as archivo:
+            tramites.loc[tramites['id_tramite'] == codigo_tramite, 'estado'] = nuevo_estado
+        with open(ruta, 'w', encoding='utf-8', newline='') as archivo:
             archivo.write(tramites.to_csv(index=False))
     except Exception as e:
         raise Exception(f"Error al actualizar el trámite: {e}")
@@ -172,7 +171,7 @@ def iniciar_tramite(id_empleado: int) -> str:
 
     try:
         id_tramite = obtener_siguiente_codigo_tramite()
-        with open(ruta, "a", encoding="utf-8", newline="") as archivo:
+        with open(ruta, 'a', encoding='utf-8', newline='') as archivo:
             writer(archivo).writerow([id_tramite, id_empleado, "", "", 1])
         return id_tramite
     except Exception as e:
@@ -186,29 +185,29 @@ def seguir_tramite(codigo: str) -> None:
         codigo: ID del trámite
     """
     tramite = cargar_tramite(codigo)
-    if tramite.iloc[0]["estado"] == 1:
+    if tramite.iloc[0]['estado'] == 1:
         empleados = cargar_empleados()
         print(empleados)
-        empleado = empleados.loc[empleados["DNI"] == tramite.iloc[0]["id_empleado"]].copy()
+        empleado = empleados.loc[empleados['DNI'] == tramite.iloc[0]['id_empleado']].copy()
         print(empleado)
-        if empleado.iloc[0]["dias_disponibles"] == 0:
-            print("No quedan días disponibles para tomarse.
-Solicitud de vacaciones denegada.")
-            actualizar_tramite(tramite.iloc[0]["id_tramite"], nuevo_estado=66)
+        if empleado.iloc[0]['dias_disponibles'] == 0:
+            print("No quedan días disponibles para tomarse.")
+            print("Solicitud de vacaciones denegada.")
+            actualizar_tramite(tramite.iloc[0]['id_tramite'], nuevo_estado=66)
         else:
-            print(f"Usted posee {empleado.iloc[0]["dias_disponibles"]} días disponibles para tomarse.")
+            print(f"Usted posee {empleado.iloc[0]['dias_disponibles']} días disponibles para tomarse.")
             while True:
                 fecha_inicio, fecha_fin = pedir_fechas()
                 dias_solicitados = calcular_dias_solicitados(fecha_inicio, fecha_fin)
-                if dias_solicitados <= empleado.iloc[0]["dias_disponibles"]:
+                if dias_solicitados <= empleado.iloc[0]['dias_disponibles']:
                     break
                 else:
-                    print(f"Se solicitan "{dias_solicitados}" días, pero sólo dispone de {empleado.iloc[0]["dias_disponibles"]} días.")
-            actualizar_tramite(tramite.iloc[0]["id_tramite"], fecha_inicio, fecha_fin, 2)
-            print(f"Solicitud de Vacaciones enviada a RRHH, con N° de Trámite: {tramite.iloc[0]["id_tramite"]}.")
-    if tramite.iloc[0]["estado"] == 2:
-        print(f"Su solicitud de Vacaciones, para las fechas {tramite.iloc[0]["fecha_inicio"]}-{tramite.iloc[0]["fecha_fin"]} se encuentra en evaluación por parte de RRHH.")
-    if tramite.iloc[0]["estado"] == 66:
+                    print(f"Se solicitan '{dias_solicitados}' días, pero sólo dispone de {empleado.iloc[0]['dias_disponibles']} días.")
+            actualizar_tramite(tramite.iloc[0]['id_tramite'], fecha_inicio, fecha_fin, 2)
+            print(f"Solicitud de Vacaciones enviada a RRHH, con N° de Trámite: {tramite.iloc[0]['id_tramite']}.")
+    if tramite.iloc[0]['estado'] == 2:
+        print(f"Su solicitud de Vacaciones, para las fechas {tramite.iloc[0]['fecha_inicio']}-{tramite.iloc[0]['fecha_fin']} se encuentra en evaluación por parte de RRHH.")
+    if tramite.iloc[0]['estado'] == 66:
         print("Su solicitud de Vacaciones fue denegada por falta de días disponibles.")
 
 def pedir_tramite() -> str:
@@ -235,8 +234,7 @@ def main():
     
     opcion_menu = 0
     while opcion_menu != 3:
-        print("
-" + "="*40)
+        print("="*40)
         print("="*2 + " SISTEMA DE SOLICITUD DE VACACIONES " + "="*2)
         print("="*40)
         print("1. Inicio de Trámite")
@@ -252,7 +250,7 @@ def main():
                     if validar_empleado_existe(DNI, empleados.DNI.tolist()):
                         break
                     else:
-                        print(f"Empleado "{DNI}" no encontrado.")
+                        print(f"Empleado '{DNI}' no encontrado.")
                 codigo_tramite = iniciar_tramite(DNI)
                 print(f"Solicitud de Vacaciones iniciada, con N° de Trámite: {codigo_tramite}.")
                 seguir_tramite(codigo_tramite)
