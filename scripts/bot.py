@@ -1,7 +1,6 @@
 '''TPI · Organización Empresarial
 Simulación de Solicitud de Vacaciones'''
 
-from csv import writer
 import pandas as pd
 from datetime import datetime
 
@@ -153,8 +152,8 @@ def actualizar_tramite(codigo_tramite: str, fecha_inicio: bool|datetime = False,
             tramites.loc[tramites['id_tramite'] == codigo_tramite, 'fecha_fin'] = fecha_fin.strftime('%d/%m/%Y')
         if nuevo_estado:
             tramites.loc[tramites['id_tramite'] == codigo_tramite, 'estado'] = nuevo_estado
-        with open(ruta, 'w', encoding='utf-8', newline='') as archivo:
-            archivo.write(tramites.to_csv(index=False))
+        with open(ruta, 'w', encoding = 'utf-8', newline = '') as archivo:
+            archivo.write(tramites.to_csv(index = False, header = True))
     except Exception as e:
         raise Exception(f"Error al actualizar el trámite: {e}")
 
@@ -171,8 +170,8 @@ def iniciar_tramite(id_empleado: int) -> str:
 
     try:
         id_tramite = obtener_siguiente_codigo_tramite()
-        with open(ruta, 'a', encoding='utf-8', newline='') as archivo:
-            writer(archivo).writerow([id_tramite, id_empleado, "", "", 1])
+        with open(ruta, 'a', encoding = 'utf-8', newline = '') as archivo:
+            archivo.write(pd.DataFrame([[id_tramite, id_empleado, "", "", 1]]).to_csv(index = False, header = False))
         return id_tramite
     except Exception as e:
         raise Exception(f"Error al registrar el inicio de trámite: {e}")
@@ -187,15 +186,13 @@ def seguir_tramite(codigo: str) -> None:
     tramite = cargar_tramite(codigo)
     if tramite.iloc[0]['estado'] == 1:
         empleados = cargar_empleados()
-        print(empleados)
         empleado = empleados.loc[empleados['DNI'] == tramite.iloc[0]['id_empleado']].copy()
-        print(empleado)
         if empleado.iloc[0]['dias_disponibles'] == 0:
             print("No quedan días disponibles para tomarse.")
             print("Solicitud de vacaciones denegada.")
-            actualizar_tramite(tramite.iloc[0]['id_tramite'], nuevo_estado=66)
+            actualizar_tramite(tramite.iloc[0]['id_tramite'], nuevo_estado = 66)
         else:
-            print(f"Usted posee {empleado.iloc[0]['dias_disponibles']} días disponibles para tomarse.")
+            print(f"\nUsted posee {empleado.iloc[0]['dias_disponibles']} días disponibles para tomarse.")
             while True:
                 fecha_inicio, fecha_fin = pedir_fechas()
                 dias_solicitados = calcular_dias_solicitados(fecha_inicio, fecha_fin)
@@ -204,11 +201,11 @@ def seguir_tramite(codigo: str) -> None:
                 else:
                     print(f"Se solicitan '{dias_solicitados}' días, pero sólo dispone de {empleado.iloc[0]['dias_disponibles']} días.")
             actualizar_tramite(tramite.iloc[0]['id_tramite'], fecha_inicio, fecha_fin, 2)
-            print(f"Solicitud de Vacaciones enviada a RRHH, con N° de Trámite: {tramite.iloc[0]['id_tramite']}.")
+            print(f"\nSolicitud de Vacaciones enviada a RRHH, con N° de Trámite: {tramite.iloc[0]['id_tramite']}.")
     if tramite.iloc[0]['estado'] == 2:
-        print(f"Su solicitud de Vacaciones, para las fechas {tramite.iloc[0]['fecha_inicio']}-{tramite.iloc[0]['fecha_fin']} se encuentra en evaluación por parte de RRHH.")
+        print(f"\nSu solicitud de Vacaciones, para las fechas {tramite.iloc[0]['fecha_inicio']}-{tramite.iloc[0]['fecha_fin']} se encuentra en evaluación por parte de RRHH.")
     if tramite.iloc[0]['estado'] == 66:
-        print("Su solicitud de Vacaciones fue denegada por falta de días disponibles.")
+        print("\nSu solicitud de Vacaciones fue denegada por falta de días disponibles.")
 
 def pedir_tramite() -> str:
     """
@@ -234,13 +231,13 @@ def main():
     
     opcion_menu = 0
     while opcion_menu != 3:
-        print("="*40)
+        print("\n" + "="*40)
         print("="*2 + " SISTEMA DE SOLICITUD DE VACACIONES " + "="*2)
         print("="*40)
         print("1. Inicio de Trámite")
         print("2. Seguimiento de Trámite")
         print("3. Salir")
-        print("="*40)
+        print("="*40 + "\n")
         try:
             opcion_menu = int(input("Seleccione una opción: "))
             if opcion_menu == 1:
