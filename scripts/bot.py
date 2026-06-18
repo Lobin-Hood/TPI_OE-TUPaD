@@ -190,7 +190,7 @@ def seguir_tramite(codigo: str) -> None:
         if empleado.iloc[0]['dias_disponibles'] == 0:
             print("No quedan días disponibles para tomarse.")
             print("Solicitud de vacaciones denegada.")
-            actualizar_tramite(tramite.iloc[0]['id_tramite'], nuevo_estado = 66)
+            actualizar_tramite(tramite.iloc[0]['id_tramite'], nuevo_estado = 5)
         else:
             print(f"\nUsted posee {empleado.iloc[0]['dias_disponibles']} días disponibles para tomarse.")
             while True:
@@ -201,11 +201,15 @@ def seguir_tramite(codigo: str) -> None:
                 else:
                     print(f"Se solicitan '{dias_solicitados}' días, pero sólo dispone de {empleado.iloc[0]['dias_disponibles']} días.")
             actualizar_tramite(tramite.iloc[0]['id_tramite'], fecha_inicio, fecha_fin, 2)
-            print(f"\nSolicitud de Vacaciones enviada a RRHH, con N° de Trámite: {tramite.iloc[0]['id_tramite']}.")
+            print(f"\nSolicitud de vacaciones enviada a RRHH, con N° de Trámite: {tramite.iloc[0]['id_tramite']}.")
     if tramite.iloc[0]['estado'] == 2:
-        print(f"\nSu solicitud de Vacaciones, para las fechas {tramite.iloc[0]['fecha_inicio']}-{tramite.iloc[0]['fecha_fin']} se encuentra en evaluación por parte de RRHH.")
-    if tramite.iloc[0]['estado'] == 66:
-        print("\nSu solicitud de Vacaciones fue denegada por falta de días disponibles.")
+        print(f"\nSu solicitud de vacaciones, para las fechas {tramite.iloc[0]['fecha_inicio']}-{tramite.iloc[0]['fecha_fin']} se encuentra en evaluación por parte de RRHH.")
+    if tramite.iloc[0]['estado'] == 3:
+        print(f"\nSu solicitud de vacaciones, para las fechas {tramite.iloc[0]['fecha_inicio']}-{tramite.iloc[0]['fecha_fin']} fue aprobada.")
+    if tramite.iloc[0]['estado'] == 4:
+        print("\nSu solicitud de vacaciones fue denegada por RRHH (comuníquese con el sector para más información).")
+    if tramite.iloc[0]['estado'] == 5:
+        print("\nSu solicitud de vacaciones fue denegada por falta de días disponibles.")
 
 def pedir_tramite() -> str:
     """
@@ -226,7 +230,7 @@ def pedir_tramite() -> str:
 
 def main():
     """
-    Función principal que simula el bot.
+    Función principal que simula el bot para empleados.
     """
     
     opcion_menu = 0
