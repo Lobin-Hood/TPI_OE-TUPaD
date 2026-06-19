@@ -9,44 +9,30 @@ Trabajo Practico Integrador (TPI), Organización Empresarial (OE), Tecnicatura U
 
 ---
 
-## 📋 Tabla de Contenidos
+## 📌 Diagrama de Flujo (BPMN 2.0)
 
-- [Descripción](#descripción)
-- [Características](#características)
-- [Requisitos Previos](#requisitos-previos)
-- [Instalación](#instalación)
-- [Uso](#uso)
-- [Estructura del Proyecto](#estructura-del-proyecto)
-- [Flujo de Proceso (BPMN)](#flujo-de-proceso-bpmn)
-- [Archivos de Datos](#archivos-de-datos)
-- [Funcionalidades Principales](#funcionalidades-principales)
-- [Errores Comunes y Soluciones](#errores-comunes-y-soluciones)
-- [Contribución](#contribución)
-- [Licencia](#licencia)
+<img src = "https://drive.google.com/uc?export=view&id=1kmVloGdB2oSu3mk9UkKk5KTVM1fSgpV3" width = "100%">
 
 ---
 
-## 📌 Descripción
+## ✨ Diccionario de Datos
 
-**TPI_OE-TUPaD** es un prototipo educativo que simula un sistema de gestión de trámites de vacaciones para una organización empresarial. El sistema permite:
+<table>
+  <tr><td colspan = "3">Entidad: <b>Empleados</b></b></td></tr>
+  <tr><td width = "20%"><b>Campo</b></td><td width = "50%"><b>Tipo</b></td><td width = "30%"><b>Descripción</b></td></tr>
+  <tr><td><b>DNI</b></td><td>Cadena de texto (aunque esté compuesto sólo por números, no van a realizarse operaciones aritméticas sobre él)</td><td>Identificador único del/a empleado/a.</td></tr>
+  <tr><td><b>dias_disponibles</b></td><td>Número entero</td><td>Cantidad de días de vacaciones disponibles.</td></tr>
+</table>
 
-- 📝 Registrar solicitudes de vacaciones de empleados
-- 🔍 Consultar el estado de trámites existentes
-- 📊 Mantener un registro persistente en archivos CSV
-- 🆔 Generar códigos únicos de transacción (`VAC001`, `VAC002`, etc.)
-- 📈 Seguimiento del flujo de aprobación de solicitudes
-
----
-
-## ✨ Características
-
-- **Gestión de Empleados**: Lectura y validación de datos de empleados desde CSV
-- **Trámites de Vacaciones**: Creación, seguimiento y actualización de solicitudes
-- **Códigos Únicos**: Generación automática de códigos de transacción en formato `VAC###`
-- **Persistencia de Datos**: Almacenamiento en archivos CSV (contador, empleados, trámites)
-- **Validación de Datos**: Verificación de tipos de datos y formatos de fechas
-- **Estados de Trámites**: Flujo de estados (1 → 2 → 66)
-- **Interfaz Interactiva**: Menú en línea de comandos para operaciones comunes
+<table>
+  <tr><td colspan = "3">Entidad: <b>Trámites</b></b></td></tr>
+  <tr><td width = "20%"><b>Campo</b></td><td width = "50%"><b>Tipo</b></td><td width = "30%"><b>Descripción</b></td></tr>
+  <tr><td><b>id_tramite</b></td><td>Cadena de texto</td><td>Identificador único del trámite.</td></tr>
+  <tr><td><b>id_empleado</b></td><td>Cadena de texto (aunque esté compuesto sólo por números, no van a realizarse operaciones aritméticas sobre él)</td><td>Identificador único del/a empleado/a.</td></tr>
+  <tr><td><b>fecha_inicio</b></td><td>Fecha (formato DD/MM/AAAA)</td><td>Fecha solicitada de inicio de vacaciones (inclusive).</td></tr>
+  <tr><td><b>fecha_fin</b></td><td>Fecha (formato DD/MM/AAAA)</td><td>Fecha solicitada de fin de vacaciones (inclusive).</td></tr>
+  <tr><td><b>estado</b></td><td>Número entero</td><td>Máquina de estados para el proceso de “solicitud de vacaciones”.</td></tr>
+</table>
 
 ---
 
@@ -59,15 +45,29 @@ Trabajo Practico Integrador (TPI), Organización Empresarial (OE), Tecnicatura U
 
 ## 📦 Instalación
 
-### 1. Clonar el Repositorio
+### 1. Clonar el repositorio
 
 ```bash
 git clone https://github.com/Lobin-Hood/TPI\_OE-TUPaD.git
 cd TPI\_OE-TUPaD
 ```
 
+### 2. Ubicar los siguientes archivos en los directorios indicados:
+<table>
+  <tr><td><b>Archivo</b></td><td><b>Ubicación</b></td><td><b>Función</b></td></tr>
+  <tr><td><b><a href = "https://drive.google.com/file/d/17Kk2KtaBxW2NaWaoD5yDJF4XzZFmi0qd">empleados.csv</a></b></td><td>/datos/</td><td>Tabla de empleados (validación de identidad y consulta de días disponibles)</td></tr>
+  <tr><td><b><a href = "https://drive.google.com/file/d/1V8OWFpMW6H695aE3wYDcl2EFlxsfA6TQ">tramites.csv</a></b></td><td>/estados/</td><td>Tabla de trámites (registro de solicitudes y máquina de estados)</td></tr>
+  <tr><td><b><a href = "https://drive.google.com/file/d/1r-EdhvryiGTijJ-a_YKI4DVf30s7O3Xk">contador.csv</a></b></td><td>/estados/</td><td>Registra número de trámites realizados (para generar códigos consecutivos).</td></tr>
+</table>
+
+### 3. Ejecutar el archivo principal:
+```bash
+cd scripts
+python bot.py
+```
+
 ---
 
 ## 👥 Integrantes del Equipo
-- **Azpiroz Dafne** (Comisión 5)
+- **Azpiroz, Dafne** (Comisión 5)
 - **Lobo, Pablo** (Comisión 24)
