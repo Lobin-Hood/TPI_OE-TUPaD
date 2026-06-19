@@ -11,7 +11,7 @@ def obtener_siguiente_codigo_tramite() -> str:
     Returns:
         Código de trámite generado
     """
-    ruta = "estados/contador.csv"
+    ruta = __file__.rsplit("\\", 2)[0] + "\\estados\\contador.csv"
 
     try:
         with open(ruta, 'r', encoding='utf-8') as archivo:
@@ -31,7 +31,7 @@ def cargar_empleados() -> pd.DataFrame:
     Returns:
         pd.DataFrame: Dataframe con empleados
     """
-    ruta = "datos/empleados.csv"
+    ruta = __file__.rsplit("\\", 2)[0] + "\\datos\\empleados.csv"
 
     empleados = pd.read_csv(ruta)
     return empleados
@@ -45,7 +45,7 @@ def cargar_tramite(codigo_tramite: str) -> pd.DataFrame:
     Returns:
         pd.DataFrame: Dataframe con datos del trámite solicitado.
     """
-    ruta = "estados/tramites.csv"
+    ruta = __file__.rsplit("\\", 2)[0] + "\\estados\\tramites.csv"
 
     try:
         tramites = pd.read_csv(ruta)
@@ -140,7 +140,7 @@ def actualizar_tramite(codigo_tramite: str, fecha_inicio: bool|datetime = False,
         fecha_fin: False si está vacío, o datetime con la fecha de finalización.
         nuevo_estado: False si está vacío, número entero con el nuevo estado del trámite.
     """
-    ruta = "estados/tramites.csv"
+    ruta = __file__.rsplit("\\", 2)[0] + "\\estados\\tramites.csv"
 
     try:
         tramites = pd.read_csv(ruta)
@@ -166,7 +166,7 @@ def iniciar_tramite(id_empleado: int) -> str:
     Returns:
         Código del trámite asignado
     """
-    ruta = "estados/tramites.csv"
+    ruta = __file__.rsplit("\\", 2)[0] + "\\estados\\tramites.csv"
 
     try:
         id_tramite = obtener_siguiente_codigo_tramite()
